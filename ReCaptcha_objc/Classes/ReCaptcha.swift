@@ -191,7 +191,10 @@ public class ReCaptcha: NSObject {
     @objc
     public func validate(on view: UIView, resetOnError: Bool = true, completion: @escaping (String) -> Void) {
         let completion2 = { [weak self] (result: ReCaptchaResult) in
-            print(try? result.dematerialize())
+            guard (try? result.dematerialize()) != nil else {
+                completion("")
+                return
+            }
             completion(try! result.dematerialize())
         }
         manager.shouldResetOnError = resetOnError
